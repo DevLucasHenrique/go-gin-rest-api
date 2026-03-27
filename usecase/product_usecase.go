@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"go-gin-rest-api/model"
-	"go-gin-rest-api/repository"
+	"github.com/DevLucasHenrique/go-gin-rest-api/model"
+	"github.com/DevLucasHenrique/go-gin-rest-api/repository"
 )
 
 type ProductUseCase struct {

@@ -1,2 +1,2 @@
-# go-gin-rest-api
+# github.com/DevLucasHenrique/go-gin-rest-api/
 

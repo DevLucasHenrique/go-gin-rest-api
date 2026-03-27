@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"go-gin-rest-api/usecase"
 	"net/http"
+
+	"github.com/DevLucasHenrique/go-gin-rest-api/usecase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,9 +19,9 @@ func NewProductController(usecase usecase.ProductUseCase) productController {
 }
 
 func (p *productController) GetProducts(ctx *gin.Context) {
-	
+
 	products, err := p.productUseCase.GetProducts()
-	if err!=nil {
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 	}
 

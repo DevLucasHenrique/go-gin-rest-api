@@ -1,10 +1,10 @@
 package main
 
 import (
-	"go-gin-rest-api/controller"
-	"go-gin-rest-api/db"
-	"go-gin-rest-api/repository"
-	"go-gin-rest-api/usecase"
+	"github.com/DevLucasHenrique/go-gin-rest-api/controller"
+	"github.com/DevLucasHenrique/go-gin-rest-api/db"
+	"github.com/DevLucasHenrique/go-gin-rest-api/repository"
+	"github.com/DevLucasHenrique/go-gin-rest-api/usecase"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +13,7 @@ func main() {
 	server := gin.Default()
 
 	dbConnection, err := db.ConnectDB()
-	if(err!=nil) {
+	if err != nil {
 		panic(err)
 	}
 

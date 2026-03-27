@@ -3,7 +3,8 @@ package repository
 import (
 	"database/sql"
 	"fmt"
-	"go-gin-rest-api/model"
+
+	"github.com/DevLucasHenrique/go-gin-rest-api/model"
 )
 
 type ProductRepository struct {
@@ -46,4 +47,3 @@ func (pr *ProductRepository) GetProducts() ([]model.Product, error) {
 
 	return productList, nil
 }
-

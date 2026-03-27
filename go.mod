@@ -1,4 +1,4 @@
-module go-gin-rest-api
+module github.com/DevLucasHenrique/go-gin-rest-api
 
 go 1.26.1
 
