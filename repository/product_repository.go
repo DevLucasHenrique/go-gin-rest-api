@@ -17,7 +17,14 @@ func NewProductRepository(connection *sql.DB) ProductRepository {
 	}
 }
 
-func (pr *ProductRepository) GetProducts() ([]model.Product, error) {
+/*
+ * @param MyParam 
+ 
+ */
+
+func (pr *ProductRepository) GetProducts() ([]model.Product, error) { /* 
+		função entra como metodo de ProductRepository e retorna uma struct do model.product
+	*/
 	query := "SELECT id, product_name, price FROM product"
 	rows, err := pr.connection.Query(query)
 	if err != nil {
@@ -46,4 +53,25 @@ func (pr *ProductRepository) GetProducts() ([]model.Product, error) {
 	rows.Close()
 
 	return productList, nil
+}
+
+
+func (pr *ProductRepository) CreateProduct(product model.Product) (int, error)  { /* 
+	função entra como metodo de ProductRepository pega como parametro um product que segue a estrutura do model.Product
+	*/
+	var id int
+	query, err := pr.connection.Prepare("INSERT INTO product (product_name, price) VALUES ($1,$2) RETURNING id") 
+	if(err!=nil) {
+		fmt.Println(err)
+		return 0, err
+	}
+
+	err = query.QueryRow(product.Name, product.Price).Scan(&id)
+	if(err!=nil) {
+		fmt.Println(err)
+		return 0, err  
+	}
+
+	query.Close()
+	return id, nil
 }

@@ -27,3 +27,7 @@ func (p *productController) GetProducts(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, products)
 }
+
+func (p *productController) CreateProduct(ctx *gin.Context) {
+	
+}
