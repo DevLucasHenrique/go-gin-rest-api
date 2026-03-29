@@ -63,12 +63,12 @@ type ProductHandler struct {
 	service *ProductService
 }
 
-func (service *ProductHandler) GetProducts(ctx gin.Context) {
+func (service *ProductHandler) GetProducts(ctx *gin.Context) {
 	products := service.service.ListProducts()
 	ctx.JSON(http.StatusOK, products)
 }
 
-func (service *ProductHandler) CreateProduct(ctx gin.Context) {
+func (service *ProductHandler) CreateProduct(ctx *gin.Context) {
 	var product Product
 	if err := ctx.ShouldBindJSON(&product); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
