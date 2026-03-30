@@ -7,6 +7,9 @@ import (
 	"github.com/DevLucasHenrique/go-gin-rest-api/model"
 )
 
+// Repository serve para fazer a conexao entre o banco de dados e o useCase que pede para o repository salvar algo
+// Em outros casos ele vai ter a array mokada quando é só para testes
+
 type ProductRepository struct {
 	connection *sql.DB
 }
@@ -17,15 +20,10 @@ func NewProductRepository(connection *sql.DB) ProductRepository {
 	}
 }
 
-/*
- * @param MyParam 
- 
- */
-
 func (pr *ProductRepository) GetProducts() ([]model.Product, error) { /* 
 		função entra como metodo de ProductRepository e retorna uma struct do model.product
 	*/
-	query := "SELECT id, product_name, price FROM product"
+	query := "SELECT id, product_name, price FROM products"
 	rows, err := pr.connection.Query(query)
 	if err != nil {
 		fmt.Println(err)
@@ -60,7 +58,7 @@ func (pr *ProductRepository) CreateProduct(product model.Product) (int, error)  
 	função entra como metodo de ProductRepository pega como parametro um product que segue a estrutura do model.Product
 	*/
 	var id int
-	query, err := pr.connection.Prepare("INSERT INTO product (product_name, price) VALUES ($1,$2) RETURNING id") 
+	query, err := pr.connection.Prepare("INSERT INTO products (product_name, price) VALUES ($1,$2) RETURNING id") 
 	if(err!=nil) {
 		fmt.Println(err)
 		return 0, err
@@ -74,4 +72,34 @@ func (pr *ProductRepository) CreateProduct(product model.Product) (int, error)  
 
 	query.Close()
 	return id, nil
+}
+
+func (pr *ProductRepository) GetProductById(id_product uint) (model.Product, error) {
+	// defer query.Close() Boas praticas para a query fechar sozinha no final
+
+	query, err := pr.connection.Prepare("SELECT * FROM products WHERE id = $1") // prepara para a query
+	if err!=nil {
+		fmt.Println(err)
+		return model.Product{}, err
+	}
+
+	var product model.Product
+
+	
+	err = query.QueryRow(id_product).Scan( // executa a query e retorna os dados passados no scan
+		&product.ID,
+		&product.Name,
+		&product.Price,
+	)
+
+	if err!=nil {
+		if(err == sql.ErrNoRows) { // se o erro for que o banco de dados não conseguiu achar o produto do id passsado
+			return model.Product{}, nil // então o erro não é do server e sim a anta do cliente, então retorna nil
+		}
+
+		return model.Product{}, err // caso não seja então foi erro no server mesmo
+	}
+
+	query.Close() // NÃO ESQUECE DE FECHAR A QUERY
+	return product, nil
 }
