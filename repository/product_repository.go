@@ -103,3 +103,21 @@ func (pr *ProductRepository) GetProductById(id_product uint) (model.Product, err
 	query.Close() // NÃO ESQUECE DE FECHAR A QUERY
 	return product, nil
 }
+
+
+func (pr *ProductRepository) UpdateProduct( product_id uint, product model.Product) (model.Product, error) {
+	query, err := pr.connection.Prepare("UPDATE products SET product_name = $1, price = $2 WHERE id = $3")
+	if err!=nil {
+		return model.Product{}, err
+	}
+	defer query.Close()
+
+	_, err = query.Exec(product.Name, product.Price, product_id)
+
+	if err!=nil {
+		fmt.Println("ERROR: ", err)
+		return model.Product{}, err
+	}
+
+	return product, nil
+}
