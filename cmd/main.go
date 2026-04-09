@@ -1,5 +1,3 @@
-// Parei em 53:09 no curso de GO
-
 package main
 
 import (
@@ -14,7 +12,6 @@ import (
 func main() {
 	server := gin.Default()
 
-
 	dbConnection, err := db.ConnectDB()
 	if err != nil {
 		panic(err)
@@ -27,7 +24,7 @@ func main() {
 	// Camada de controllers
 	ProductController := controller.NewProductController(ProductUseCase)
 
-	server.GET("/ping", func(ctx *gin.Context) {
+	server.GET("/pings", func(ctx *gin.Context) {
 		ctx.JSON(200, gin.H{
 			"message": "pong",
 		})
@@ -43,8 +40,7 @@ func main() {
 	// POST
 	server.POST("/products", ProductController.CreateProduct)
 
-
-	server.Run(":8000") 
+	server.Run(":8000")
 }
 
 /* func main() {

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -47,7 +46,7 @@ func (p *productController) CreateProduct(ctx *gin.Context) {
 
 	insertedProduct, err := p.productUseCase.CreateProduct(product)
 
-	if err!=nil {
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
@@ -58,7 +57,7 @@ func (p *productController) CreateProduct(ctx *gin.Context) {
 func (p *productController) GetProductById(ctx *gin.Context) {
 	id := ctx.Param("productId")
 
-	if(id == "") {
+	if id == "" {
 		response := model.Response{
 			Message: "Id cannot be nothing",
 		}
@@ -67,22 +66,21 @@ func (p *productController) GetProductById(ctx *gin.Context) {
 	}
 
 	productId, err := strconv.Atoi(id)
-	if err!=nil {
+	if err != nil {
 		response := model.Response{
 			Message: "ERROR: Product Id is not a number",
 		}
 		ctx.JSON(http.StatusBadRequest, response)
 		return
-	} 
-
+	}
 
 	product, err := p.productUseCase.GetProductById(uint(productId))
-	
+
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	
+
 	if err == nil && product == nil {
 		response := model.Response{
 			Message: "Product not found in Database",
@@ -95,7 +93,6 @@ func (p *productController) GetProductById(ctx *gin.Context) {
 }
 
 func (p *productController) UpdateProduct(ctx *gin.Context) {
-	fmt.Println("Chegou no controller")
 
 	var product model.Product
 	product_id := ctx.Param("productId")
@@ -109,8 +106,8 @@ func (p *productController) UpdateProduct(ctx *gin.Context) {
 	}
 
 	productId, err := strconv.Atoi(product_id)
-	
-	if err!=nil {
+
+	if err != nil {
 		response := model.Response{
 			Message: "Id need to be a Number",
 		}
@@ -120,7 +117,7 @@ func (p *productController) UpdateProduct(ctx *gin.Context) {
 
 	err = ctx.BindJSON(&product)
 
-	if( product == model.Product{}) {
+	if (product == model.Product{}) {
 		response := model.Response{
 			Message: "Product cannot be nil",
 		}
@@ -128,15 +125,14 @@ func (p *productController) UpdateProduct(ctx *gin.Context) {
 		return
 	}
 
-	if err!= nil {
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	product, err = p.productUseCase.UpdateProduct(uint(productId), product)
-	if err!=nil {
+	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, err)
-		
 		return
 	}
 
